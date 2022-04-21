@@ -23,7 +23,7 @@ function Home(){
         // make API call with parameters and use promises to get response
         fetch("https://yxm0puisda.execute-api.ap-northeast-2.amazonaws.com/dev", requestOptions)
         .then(response => response.text())
-        .then(result => alert(JSON.parse(result).body))
+        .then(result => alert(result))
         .catch(error => console.log('error', error));
     }
 
