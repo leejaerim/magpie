@@ -64,7 +64,7 @@ function Home(){
                             4번 테이블
                         </Button>
                     </ul>
-                    <Alert severity="success" style={{width : '20%', marginLeft:'2%'}}>
+                    <Alert severity="success" style={{width : '60%', marginLeft:'10%'}}>
                         총액 : {sumCost}
                     </Alert>
                 </div>  
