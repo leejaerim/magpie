@@ -6,35 +6,37 @@ function Home(){
     const [index,setIndex] = useState(0);
     const [sumCost,setSumCost] = useState(0);
 
-    var callAPI = (cost)=>{
+    const callAPI = (cost)=>{
         // instantiate a headers object
-        var myHeaders = new Headers();
+        let myHeaders = new Headers();
         // add content type header to object
         myHeaders.append("Content-Type", "application/json");
         // using built in JSON utility package turn object to string and store in a variable
-        var raw = JSON.stringify({"cost":cost});
+        let raw = JSON.stringify({"cost":cost});
         // create a JSON object with parameters for API call and store in a variable
-        var requestOptions = {
+        let requestOptions = {
             method: 'POST',
             headers: myHeaders,
             body: raw,
             redirect: 'follow'
         };
+        const _func = function(val){
+            setSumCost(val);
+            alert("결제 완료");
+        }
         // make API call with parameters and use promises to get response
-        fetch("https://yxm0puisda.execute-api.ap-northeast-2.amazonaws.com/dev", requestOptions)
+        fetch('https://yxm0puisda.execute-api.ap-northeast-2.amazonaws.com/dev/', requestOptions)
         .then(response => response.text())
-        .then(result => alert(result))
-        .catch(error => console.log('error', error));
+        .then(result => _func(JSON.parse(result).body))
+        .catch(error =>  alert('error', error));
     }
-
     const onUpdateIndex = (val) => {
         setIndex(val);
     };
     const onUpdateSum = (val) => {
         callAPI(val);
-        setSumCost(sumCost+val);
     };
-      
+
     return(
         <div className="d-grid gap-2" style={{height:'100%'}}>
                 <Table num={1} index={index} onUpdateIndex={onUpdateIndex} onUpdateSum={onUpdateSum}>
