@@ -6,14 +6,14 @@ function Menu(props){
     const onIncrease = () => {
         //setCnt(cnt+1);
         props.onUpdateCost(props.cost);
-        props.onUpdateCnt(props.index , +1)
+        props.onUpdateCnt(props.index , +1,props.mName)
       }
     
     const onDecrease = () => {
         if(props.cnt >0){
             //setCnt(cnt -1);
             props.onUpdateCost(-props.cost);
-            props.onUpdateCnt(props.index , -1)
+            props.onUpdateCnt(props.index , -1,props.mName)
         }
     }
   return(

@@ -1,9 +1,9 @@
 import logo from './logo.svg';
 import './App.css';
-import React , { useState }from 'react';
+import React , { useState, useCallback,useEffect, useRef }from 'react';
 import { Route ,BrowserRouter} from 'react-router-dom';
 import Home from './Home.js';
-function App() {
+const App = ()=> {
   return (
     <div>
       <BrowserRouter>

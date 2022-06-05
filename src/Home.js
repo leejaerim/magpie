@@ -1,19 +1,39 @@
-import React , { useState }from 'react';
+import React , { useState,useCallback,useRef, useEffect} from 'react';
 import { Button} from '@mui/material';
 import Table from './table.js';
 import Alert from '@mui/material/Alert';
-function Home(){
+const URL  = process.env.REACT_APP_URL;
+function Home(){    
+    const [socket,setSocket] = useState(new WebSocket(URL));
+    const [isConnected, setIsConnected] = useState(false);
     const [index,setIndex] = useState(0);
     const [sumCost,setSumCost] = useState(0);
-
+    useEffect(()=>{
+        onConnect()
+        return () => {
+            socket.removeEventListener('open', onSocketOpen);
+            socket.removeEventListener('close', onSocketClose);
+            socket.removeEventListener('message', (event) => {
+                onSocketMessage(event.data);
+              });
+          };
+    },[socket])
+    const onSocketOpen = useCallback(() => {
+        setIsConnected(true);
+        console.log("Open");
+    }, []);
+    const onSocketClose = useCallback(() => {
+        setIsConnected(false);
+        console.log("Close");
+    }, []);
+    const onSocketMessage = useCallback((dataStr) => {
+        const data = JSON.parse(dataStr);
+        console.log(data)
+    }, []);
     const callAPI = (cost)=>{
-        // instantiate a headers object
         let myHeaders = new Headers();
-        // add content type header to object
         myHeaders.append("Content-Type", "application/json");
-        // using built in JSON utility package turn object to string and store in a variable
         let raw = JSON.stringify({"cost":cost});
-        // create a JSON object with parameters for API call and store in a variable
         let requestOptions = {
             method: 'POST',
             headers: myHeaders,
@@ -36,16 +56,34 @@ function Home(){
     const onUpdateSum = (val) => {
         callAPI(val);
     };
-
+    const onConnect = useCallback(() => {
+        if (socket.readyState == WebSocket.CONNECTING) {
+            socket.addEventListener('open', onSocketOpen);
+            socket.addEventListener('close', onSocketClose);
+            socket.addEventListener('message', (event) => {
+                onSocketMessage(event.data);
+              });
+            }
+      }, []);
+    const onSendMessage =(table, data)=>{
+        console.log(table,data);
+        if (socket.readyState == WebSocket.OPEN){
+            socket.send(JSON.stringify({
+                action: 'setCnt',
+                'table':table,
+                'data':data
+              }));
+        }
+    }
     return(
         <div className="d-grid gap-2" style={{height:'100%'}}>
-                <Table num={1} index={index} onUpdateIndex={onUpdateIndex} onUpdateSum={onUpdateSum}>
+                <Table num={1} index={index} onUpdateIndex={onUpdateIndex} onUpdateSum={onUpdateSum} onSendMessage={onSendMessage}>
                 </Table>
-                <Table num={2} index={index} onUpdateIndex={onUpdateIndex} onUpdateSum={onUpdateSum}>
+                <Table num={2} index={index} onUpdateIndex={onUpdateIndex} onUpdateSum={onUpdateSum} onSendMessage={onSendMessage}>
                 </Table>
-                <Table num={3} index={index} onUpdateIndex={onUpdateIndex} onUpdateSum={onUpdateSum}>
+                <Table num={3} index={index} onUpdateIndex={onUpdateIndex} onUpdateSum={onUpdateSum} onSendMessage={onSendMessage}>
                 </Table>
-                <Table num={4} index={index} onUpdateIndex={onUpdateIndex} onUpdateSum={onUpdateSum}>
+                <Table num={4} index={index} onUpdateIndex={onUpdateIndex} onUpdateSum={onUpdateSum} onSendMessage={onSendMessage}>
                 </Table>
                 <div className={index === 0 ? 'active' : 'none'}>
                     <ul>

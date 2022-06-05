@@ -16,15 +16,16 @@ function Table(props){
     const onUpdateCost = (val) => {
         setCost(cost+val);
     };
-    const onUpdateCnt= (index,val) =>{
+    const onUpdateCnt= (index,val,mName) =>{
         cnt[index] = cnt[index]+val;
         setCnt(cnt)
+        props.onSendMessage(props.num,{'menu':mName,'cnt':cnt[index]})
     }
     return(
         <span>
             <div  className={props.index === props.num ? 'active' : 'none'}>
                 <ul></ul>
-            <List defaultActiveKey="#link1" style={{width : '80%'}}>
+            <List style={{width : '80%'}}>
                 <Menu mName={'김치찌개'} index={0} cnt={cnt[0]} onUpdateCost={onUpdateCost} onUpdateCnt={onUpdateCnt}cost={8000}/>
                 <Menu mName={'계란말이'} index={1} cnt={cnt[1]} onUpdateCost={onUpdateCost} onUpdateCnt={onUpdateCnt} cost={5000}/>
                 <Menu mName={'추가'} index={2} cnt={cnt[2]} onUpdateCost={onUpdateCost} onUpdateCnt={onUpdateCnt} cost={1000}/>
@@ -40,6 +41,9 @@ function Table(props){
                 </Button>
                 <Button style={{marginLeft:'20%'}} variant="contained" onClick={()=> props.onUpdateIndex(0)} >
                             테이블
+                </Button>
+                <Button style={{marginLeft:'20%'}} variant="contained" onClick={()=> props.onConnect()} >
+                            테스트
                 </Button>
             </div>
         </span>
