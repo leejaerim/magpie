@@ -8,8 +8,16 @@ function Home(){
     const [isConnected, setIsConnected] = useState(false);
     const [index,setIndex] = useState(0);
     const [sumCost,setSumCost] = useState(0);
+    const [cnt,setCnt]=useState([[0,0,0,0,0],[0,0,0,0,0],[0,0,0,0,0],[0,0,0,0,0]]);
+
     useEffect(()=>{
-        onConnect()
+        if (socket.readyState == WebSocket.CONNECTING) {
+            socket.addEventListener('open', onSocketOpen);
+            socket.addEventListener('close', onSocketClose);
+            socket.addEventListener('message', (event) => {
+                onSocketMessage(event.data);
+              });
+        }
         return () => {
             socket.removeEventListener('open', onSocketOpen);
             socket.removeEventListener('close', onSocketClose);
@@ -21,15 +29,18 @@ function Home(){
     const onSocketOpen = useCallback(() => {
         setIsConnected(true);
         console.log("Open");
-    }, []);
+    }, [socket]);
     const onSocketClose = useCallback(() => {
         setIsConnected(false);
         console.log("Close");
-    }, []);
+    }, [socket]);
     const onSocketMessage = useCallback((dataStr) => {
         const data = JSON.parse(dataStr);
         console.log(data)
-    }, []);
+        if(data.privateMessage.action == 'setCnt'){
+            setCnt(data.privateMessage.data)
+        }
+    }, [cnt]);
     const callAPI = (cost)=>{
         let myHeaders = new Headers();
         myHeaders.append("Content-Type", "application/json");
@@ -56,34 +67,24 @@ function Home(){
     const onUpdateSum = (val) => {
         callAPI(val);
     };
-    const onConnect = useCallback(() => {
-        if (socket.readyState == WebSocket.CONNECTING) {
-            socket.addEventListener('open', onSocketOpen);
-            socket.addEventListener('close', onSocketClose);
-            socket.addEventListener('message', (event) => {
-                onSocketMessage(event.data);
-              });
-            }
-      }, []);
-    const onSendMessage =(table, data)=>{
-        console.log(table,data);
+    const onSendMessage =(table, cnt_)=>{
+        cnt[table-1] = cnt_
         if (socket.readyState == WebSocket.OPEN){
             socket.send(JSON.stringify({
                 action: 'setCnt',
-                'table':table,
-                'data':data
+                'data':cnt
               }));
         }
     }
     return(
         <div className="d-grid gap-2" style={{height:'100%'}}>
-                <Table num={1} index={index} onUpdateIndex={onUpdateIndex} onUpdateSum={onUpdateSum} onSendMessage={onSendMessage}>
+                <Table num={1} index={index} cnt={cnt[0]} onUpdateIndex={onUpdateIndex} onUpdateSum={onUpdateSum} onSendMessage={onSendMessage}>
                 </Table>
-                <Table num={2} index={index} onUpdateIndex={onUpdateIndex} onUpdateSum={onUpdateSum} onSendMessage={onSendMessage}>
+                <Table num={2} index={index} cnt={cnt[1]} onUpdateIndex={onUpdateIndex} onUpdateSum={onUpdateSum} onSendMessage={onSendMessage}>
                 </Table>
-                <Table num={3} index={index} onUpdateIndex={onUpdateIndex} onUpdateSum={onUpdateSum} onSendMessage={onSendMessage}>
+                <Table num={3} index={index} cnt={cnt[2]} onUpdateIndex={onUpdateIndex} onUpdateSum={onUpdateSum} onSendMessage={onSendMessage}>
                 </Table>
-                <Table num={4} index={index} onUpdateIndex={onUpdateIndex} onUpdateSum={onUpdateSum} onSendMessage={onSendMessage}>
+                <Table num={4} index={index} cnt={cnt[3]} onUpdateIndex={onUpdateIndex} onUpdateSum={onUpdateSum} onSendMessage={onSendMessage}>
                 </Table>
                 <div className={index === 0 ? 'active' : 'none'}>
                     <ul>
