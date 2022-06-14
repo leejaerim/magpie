@@ -29,6 +29,18 @@ function reducer(currentState,action){
       [obj['key']]: obj,      
     }), {});      
     return { ...currentState, keys, objs };
+  }else if(type === 'userReducer/EDIT_USER'){
+    const { key, Cnt } = data; 
+    return {        
+      ...currentState,       
+      objs:{          
+        ...currentState.objs,          
+        [key]: { 
+          ...currentState.objs[key], 
+          Cnt
+        },        
+      },      
+    };
   }
   return newState
 }

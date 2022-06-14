@@ -7,12 +7,16 @@ import './table.css';
 import {useDispatch, useSelector} from 'react-redux'
 
 const SET_MENU = 'userReducer/SET_MENU';
+const EDIT_MENU = 'userReducer/EDIT_USER';
 const setMenu = arg => ({
-    type: SET_USER,
+    type: SET_MENU,
     data: arg,
 });
+const editMenu = (key, Cnt) => ({    
+    type: EDIT_MENU,    
+    data: {key, Cnt},
+});
 function Table(props){
-
     const [cost, setCost] = useState(0);
     const [cnt,setCnt] = useState(props.cnt);
     const onCount = () => {
@@ -23,9 +27,8 @@ function Table(props){
     const onUpdateCost = (val) => {
         setCost(cost+val);
     };
-    const onUpdateCnt= (index,val) =>{
-        cnt[index] = cnt[index]+val;
-        props.onSendMessage(props.num,cnt)
+    const onUpdateCnt= (key,val) =>{
+        dispatch(editMenu(key, val));
     }
     const dispatch = useDispatch();
     useEffect(()=>{
@@ -36,22 +39,22 @@ function Table(props){
                     Cnt: 0,          
                     Cost: 8000,        
                 },        
-                {          
+                {                  
                     mName: "계란말이",         
                     Cnt: 0,          
                     Cost: 5000,        
                 },     
-                {          
+                {                   
                     mName: "추가",         
                     Cnt: 0,          
                     Cost: 1000,        
                 },    
-                {          
+                {                  
                     mName: "음료수",         
                     Cnt: 0,          
                     Cost: 2000,        
                 },    
-                {          
+                {                  
                     mName: "소주/맥주",         
                     Cnt: 0,          
                     Cost: 4000,        
@@ -62,6 +65,8 @@ function Table(props){
     
     const {keys , objs} = useSelector((state)=>state);
     const userData = keys.map((key) => objs[key]);
+    let Sum = 0
+    for(const i in userData){ Sum = Sum + userData[i].Cnt*userData[i].Cost}
     return(
         <span>
             <div  className={props.index === props.num ? 'active' : 'none'}>
@@ -74,7 +79,7 @@ function Table(props){
                 ))}
             </List>
                 <Alert severity="info" style={{width : '80%'}}>
-                    총액 : {cost}
+                    총액 : {Sum}
                 </Alert>
                 <Button variant="contained" onClick={() => onCount()}>
                             계산
