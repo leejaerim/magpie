@@ -39,6 +39,7 @@ function Home(){
               }));
         }
     }
+    
     const callAPI = (cost)=>{
         let myHeaders = new Headers();
         myHeaders.append("Content-Type", "application/json");

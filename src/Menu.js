@@ -18,7 +18,6 @@ function Menu(props){
           props.onUpdateCnt(props.index , props.cnt-1)
       }
   }
-  console.log(props.index)
   return(
     <div>
         <Alert severity="info" onClick={()=>onDecrease()}>

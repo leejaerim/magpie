@@ -6,17 +6,8 @@ import Menu from './Menu.js';
 import './table.css';
 import {useDispatch, useSelector} from 'react-redux'
 
-const SET_MENU = 'userReducer/SET_MENU';
-const EDIT_MENU = 'userReducer/EDIT_USER';
-const setMenu = arg => ({
-    type: SET_MENU,
-    data: arg,
-});
-const editMenu = (key, Cnt) => ({    
-    type: EDIT_MENU,    
-    data: {key, Cnt},
-});
 function Table(props){
+    const [menu, setMenu] = useState([])
     const [cost, setCost] = useState(0);
     const [cnt,setCnt] = useState(props.cnt);
     const onCount = () => {
@@ -28,58 +19,43 @@ function Table(props){
         setCost(cost+val);
     };
     const onUpdateCnt= (key,val) =>{
-        dispatch(editMenu(key, val));
+        
     }
-    const dispatch = useDispatch();
+    let userData = []; 
+    function func_(e){
+        setMenu(e)
+    }
+    const getMenuList =_=>{
+        let myHeaders = new Headers();
+        myHeaders.append("Content-Type", "application/json");
+        let requestOptions = {
+            method: 'GET',
+            headers: myHeaders,
+            redirect: 'follow'
+        };   
+        // make API call with parameters and use promises to get response
+        fetch('https://uudbdfxsa2.execute-api.ap-northeast-2.amazonaws.com/dev', requestOptions)
+        .then(response => response.text())
+        .then(result => func_(JSON.parse(result).body.Items))
+        .catch(error =>  alert('error', error));
+    }
     useEffect(()=>{
-        dispatch(      
-            setMenu([        
-                {          
-                    mName: "김치찌개",         
-                    Cnt: 0,          
-                    Cost: 8000,        
-                },        
-                {                  
-                    mName: "계란말이",         
-                    Cnt: 0,          
-                    Cost: 5000,        
-                },     
-                {                   
-                    mName: "추가",         
-                    Cnt: 0,          
-                    Cost: 1000,        
-                },    
-                {                  
-                    mName: "음료수",         
-                    Cnt: 0,          
-                    Cost: 2000,        
-                },    
-                {                  
-                    mName: "소주/맥주",         
-                    Cnt: 0,          
-                    Cost: 4000,        
-                },     
-            ])    
-        );
+        getMenuList();
     },[])
     
-    const {keys , objs} = useSelector((state)=>state);
-    const userData = keys.map((key) => objs[key]);
-    let Sum = 0
-    for(const i in userData){ Sum = Sum + userData[i].Cnt*userData[i].Cost}
     return(
         <span>
             <div  className={props.index === props.num ? 'active' : 'none'}>
                 <ul></ul>
-            <List style={{width : '80%'}}>
-                {userData.map((item) => (          
-                    <React.Fragment key={item.key}>            
-                        <Menu mName={item.mName} index={item.key} cnt={item.Cnt} onUpdateCost={onUpdateCost} onUpdateCnt={onUpdateCnt} cost={item.Cost}/>
-                    </React.Fragment>        
-                ))}
-            </List>
+                <List style={{width : '80%'}}>
+                    {menu.map((item) => (          
+                        <React.Fragment key={item.menuid}>            
+                            <Menu mName={item.NAME} index={item.menuid} cnt={item.CNT} onUpdateCost={onUpdateCost} onUpdateCnt={onUpdateCnt} cost={item.COST}/>
+                        </React.Fragment>        
+                    ))}
+                </List> 
                 <Alert severity="info" style={{width : '80%'}}>
-                    총액 : {Sum}
+                    총액 : {0}
                 </Alert>
                 <Button variant="contained" onClick={() => onCount()}>
                             계산
