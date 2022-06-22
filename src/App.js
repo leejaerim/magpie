@@ -3,7 +3,8 @@ import './App.css';
 import { Authenticator } from '@aws-amplify/ui-react';
 import '@aws-amplify/ui-react/styles.css';
 import { listNotes } from './graphql/queries';
-import { createNote as createNoteMutation, deleteNote as deleteNoteMutation } from './graphql/mutations';
+import { createNote as createNoteMutation, deleteNote as deleteNoteMutation} from './graphql/mutations';
+import { onCreateNote, onDeleteNote } from './graphql/subscriptions';
 import { API, Storage } from 'aws-amplify';
 const initialFormState = { name: '', description: '' }
 
@@ -32,13 +33,22 @@ function App() {
       }
       return note;
     }))
+    API.graphql({ query: onCreateNote}).subscribe({
+      next: data => {
+        console.log('data: ', data)
+      }
+    });
+    API.graphql({ query: onDeleteNote}).subscribe({
+      next: data => {
+        console.log('data: ', data)
+      }
+    })
     setNotes(apiData.data.listNotes.items);
   }
 
   async function createNote() {
     if (!formData.name || !formData.description) return;
     await API.graphql({ query: createNoteMutation, variables: { input: formData } });
-    debugger;
     if (formData.image) {
       const image = await Storage.get(formData.image);
       formData.image = image;
@@ -50,7 +60,7 @@ function App() {
   async function deleteNote({ id }) {
     const newNotesArray = notes.filter(note => note.id !== id);
     setNotes(newNotesArray);
-    await API.graphql({ query: deleteNoteMutation, variables: { input: { id } }});
+    await API.graphql({ query: deleteNoteMutation, variables: { input: { id } }})
   }
 
   return (

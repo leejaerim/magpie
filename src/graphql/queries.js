@@ -32,3 +32,34 @@ export const listNotes = /* GraphQL */ `
     }
   }
 `;
+export const getMenu = /* GraphQL */ `
+  query GetMenu($id: ID!) {
+    getMenu(id: $id) {
+      id
+      name
+      Cnt
+      Cost
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const listMenus = /* GraphQL */ `
+  query ListMenus(
+    $filter: ModelMenuFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listMenus(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        name
+        Cnt
+        Cost
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
