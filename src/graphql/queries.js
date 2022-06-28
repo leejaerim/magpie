@@ -37,8 +37,8 @@ export const getMenu = /* GraphQL */ `
     getMenu(id: $id) {
       id
       name
-      Cnt
-      Cost
+      cnt
+      cost
       createdAt
       updatedAt
     }
@@ -54,8 +54,8 @@ export const listMenus = /* GraphQL */ `
       items {
         id
         name
-        Cnt
-        Cost
+        cnt
+        cost
         createdAt
         updatedAt
       }

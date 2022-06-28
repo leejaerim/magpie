@@ -3,9 +3,12 @@ import './App.css';
 import { Authenticator } from '@aws-amplify/ui-react';
 import '@aws-amplify/ui-react/styles.css';
 import { listNotes } from './graphql/queries';
-import { createNote as createNoteMutation, deleteNote as deleteNoteMutation} from './graphql/mutations';
-import { onCreateNote, onDeleteNote } from './graphql/subscriptions';
+import { createNote as createNoteMutation, deleteNote as deleteNoteMutation, updateNote as updateNoteMutiation} from './graphql/mutations';
+import { onCreateNote, onDeleteNote,onUpdateNote } from './graphql/subscriptions';
 import { API, Storage } from 'aws-amplify';
+import Menu from './component/menu.js';
+import { Button} from '@mui/material';
+import Header from './component/header.js';
 const initialFormState = { name: '', description: '' }
 
 function App() {
@@ -14,6 +17,21 @@ function App() {
 
   useEffect(() => {
     fetchNotes();
+    API.graphql({ query: onCreateNote}).subscribe({
+      next: data => {
+        fetchNotes();
+      }
+    });
+    API.graphql({ query: onDeleteNote}).subscribe({
+      next: data => {
+        fetchNotes();
+      }
+    })
+    API.graphql({ query: onUpdateNote}).subscribe({
+      next: data => {
+        fetchNotes();
+      }
+    })
   }, []);
 
   async function onChange(e) {
@@ -33,16 +51,6 @@ function App() {
       }
       return note;
     }))
-    API.graphql({ query: onCreateNote}).subscribe({
-      next: data => {
-        console.log('data: ', data)
-      }
-    });
-    API.graphql({ query: onDeleteNote}).subscribe({
-      next: data => {
-        console.log('data: ', data)
-      }
-    })
     setNotes(apiData.data.listNotes.items);
   }
 
@@ -53,21 +61,24 @@ function App() {
       const image = await Storage.get(formData.image);
       formData.image = image;
     }
-    setNotes([ ...notes, formData ]);
-    setFormData(initialFormState);
   }
 
   async function deleteNote({ id }) {
-    const newNotesArray = notes.filter(note => note.id !== id);
-    setNotes(newNotesArray);
     await API.graphql({ query: deleteNoteMutation, variables: { input: { id } }})
+  }
+  async function updateNote(formData) {
+    formData.description += 1;
+    await API.graphql({ query: updateNoteMutiation, variables: { input: {
+      id: formData.id,
+      description: formData.description
+    } }})
   }
 
   return (
     <Authenticator>
       {({ signOut, user }) => (
         <div className="App">
-        <h1>My Notes App</h1>
+        <Header title="Administrator Page Menu List"></Header>
         <input
           onChange={e => setFormData({ ...formData, 'name': e.target.value})}
           placeholder="Note name"
@@ -80,15 +91,17 @@ function App() {
         />
         <input type="file" onChange={onChange}/>
         <button onClick={createNote}>Create Note</button>
+        <p></p>
+        <br></br>
         <div style={{marginBottom: 30}}>
         {
           notes.map(note => (
             <div key={note.id || note.name}>
-              <h2>{note.name}</h2>
-              <p>{note.description}</p>
-              <button onClick={() => deleteNote(note)}>Delete note</button>
+              <Menu mName={note.name} cnt={note.description}></Menu>
+              <Button onClick={() => deleteNote(note)} variant="contained" style={{display:'inline'}}>Delete note</Button>
+              <Button onClick={() => updateNote(note)} variant="contained" style={{display:'inline'}}>Update note</Button>
               {
-                note.image && <img src={note.image} style={{width: 400}} />
+                note.image && <img src={note.image} style={{width: 400, float:'right'}} />
               }
             </div>
           ))

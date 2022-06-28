@@ -54,8 +54,8 @@ export const createMenu = /* GraphQL */ `
     createMenu(input: $input, condition: $condition) {
       id
       name
-      Cnt
-      Cost
+      cnt
+      cost
       createdAt
       updatedAt
     }
@@ -69,8 +69,8 @@ export const updateMenu = /* GraphQL */ `
     updateMenu(input: $input, condition: $condition) {
       id
       name
-      Cnt
-      Cost
+      cnt
+      cost
       createdAt
       updatedAt
     }
@@ -84,8 +84,8 @@ export const deleteMenu = /* GraphQL */ `
     deleteMenu(input: $input, condition: $condition) {
       id
       name
-      Cnt
-      Cost
+      cnt
+      cost
       createdAt
       updatedAt
     }
