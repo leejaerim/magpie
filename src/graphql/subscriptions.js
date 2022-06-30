@@ -42,8 +42,8 @@ export const onCreateMenu = /* GraphQL */ `
     onCreateMenu {
       id
       name
-      cnt
       cost
+      image
       createdAt
       updatedAt
     }
@@ -54,8 +54,8 @@ export const onUpdateMenu = /* GraphQL */ `
     onUpdateMenu {
       id
       name
-      cnt
       cost
+      image
       createdAt
       updatedAt
     }
@@ -66,8 +66,8 @@ export const onDeleteMenu = /* GraphQL */ `
     onDeleteMenu {
       id
       name
-      cnt
       cost
+      image
       createdAt
       updatedAt
     }

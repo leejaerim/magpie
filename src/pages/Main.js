@@ -7,6 +7,7 @@ import Menu from '../component/Menu.js';
 import { Button} from '@mui/material';
 import ButtonAppBar from '../component/ButtonAppBar.js';
 import BasicTabs from '../component/BasicTabs.js';
+import './Main.css';
 const initialFormState = { name: '', description: '' }
 
 
@@ -98,8 +99,8 @@ function Main({signOut}) {
                 notes.map(note => (
                     <div key={note.id || note.name}>
                     <Menu mname={note.name} cnt={note.description}></Menu>
-                    <Button onClick={() => deleteNote(note)} variant="contained" style={{display:'inline'}}>Delete note</Button>
-                    <Button onClick={() => updateNote(note)} variant="contained" style={{display:'inline'}}>Update note</Button>
+                    <Button onClick={() => deleteNote(note)} variant="contained" style={{display:'inline'}}>+</Button>
+                    <Button onClick={() => updateNote(note)} variant="contained" style={{display:'inline'}}>-</Button>
                     {
                         note.image && <img src={note.image} style={{width: 400, float:'right'}} />
                     }
