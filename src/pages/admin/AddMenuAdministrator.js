@@ -4,6 +4,7 @@ import { createMenu as createMenuMutation, deleteMenu as deleteMenuMutation, upd
 import { onCreateMenu, onDeleteMenu, onUpdateMenu } from '../../graphql/subscriptions.js';
 import { API, Storage } from 'aws-amplify';
 import Menu from '../../component/Menu.js'
+import BasicCard from '../../component/BasicCard.js'
 const initialFormState = { name: '', cost: '' }
 
 function AddMenuAdministrator() {
@@ -88,19 +89,27 @@ function AddMenuAdministrator() {
                 <button onClick={createMenu}>Create Menu</button>
                 <p></p>
                 <br></br>
-                <div style={{marginBottom: 30}}>
-                {
+                <div style={{marginBottom: 30, float:"left"}}>
+                {/* {
                 menus.map(menu => (
                     <div key={menu.id || menu.name}>
                     <Menu mname={menu.name} cost={menu.cost}></Menu>
                     {/* <Button onClick={() => deleteNote(note)} variant="contained" style={{display:'inline'}}>+</Button>
-                    <Button onClick={() => updateNote(note)} variant="contained" style={{display:'inline'}}>-</Button> */}
+                    <Button onClick={() => updateNote(note)} variant="contained" style={{display:'inline'}}>-</Button> }
                     {
                         menu.image && <img src={menu.image} style={{width: 400}} />
                     }
                     </div>
                 ))
+                } */}
+                {
+                menus.map(menu => (
+                    <div key={menu.id || menu.name} style={{display:"inline-block"}}>
+                    <BasicCard menu={menu}></BasicCard>
+                    </div>
+                ))
                 }
+                
                 </div>
             </div>
         );
