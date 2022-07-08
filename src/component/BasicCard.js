@@ -40,8 +40,9 @@ export default function BasicCard({menu}) {
           {'"a benevolent smile"'}
         </Typography>
       </CardContent>
-      <CardActions>
-        <Button size="small">Learn More</Button>
+      <CardActions style={{display:'block'}}>
+        <Button size="small" variant="outlined">+</Button>
+        <Button size="small" variant="outlined">-</Button>
       </CardActions>
     </Card>
   );

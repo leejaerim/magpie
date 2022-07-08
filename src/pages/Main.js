@@ -80,34 +80,6 @@ function Main({signOut}) {
             <div className="App">
                 <ButtonAppBar logout={signOut}></ButtonAppBar>
                 <BasicTabs></BasicTabs>
-                <input
-                onChange={OnChange}
-                placeholder="Note name"
-                value={formData.name}
-                />
-                <input
-                onChange={e => setFormData({ ...formData, 'description': e.target.value})}
-                placeholder="Note description"
-                value={formData.description}
-                />
-                <input type="file" onChange={onChange}/>
-                <button onClick={createNote}>Create Note</button>
-                <p></p>
-                <br></br>
-                <div style={{marginBottom: 30}}>
-                {
-                notes.map(note => (
-                    <div key={note.id || note.name}>
-                    <Menu mname={note.name} cnt={note.description}></Menu>
-                    <Button onClick={() => deleteNote(note)} variant="contained" style={{display:'inline'}}>+</Button>
-                    <Button onClick={() => updateNote(note)} variant="contained" style={{display:'inline'}}>-</Button>
-                    {
-                        note.image && <img src={note.image} style={{width: 400, float:'right'}} />
-                    }
-                    </div>
-                ))
-                }
-                </div>
             </div>
         );
 }

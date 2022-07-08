@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { listMenus } from '../../graphql/queries.js';
-import { createMenu as createMenuMutation, deleteMenu as deleteMenuMutation, updateMenu as updateMenuMutiation} from '../../graphql/mutations.js';
-import { onCreateMenu, onDeleteMenu, onUpdateMenu } from '../../graphql/subscriptions.js';
+import { listMenus } from './../graphql/queries.js';
+import { createMenu as createMenuMutation, deleteMenu as deleteMenuMutation, updateMenu as updateMenuMutiation} from './../graphql/mutations.js';
+import { onCreateMenu, onDeleteMenu, onUpdateMenu } from './../graphql/subscriptions.js';
 import { API, Storage } from 'aws-amplify';
-import Menu from '../../component/Menu.js'
-import BasicCard from '../../component/BasicCard.js'
-const initialFormState = { name: '', cost: '' }
+import BasicCard from './../component/BasicCard.js'
 
-function AddMenuAdministrator() {
+const initialFormState = { name: '', cost: '' }
+function Order(props) {
     const [menus, setMenus] = useState([]);
     const [formData, setFormData] = useState(initialFormState);
 
@@ -73,20 +72,6 @@ function AddMenuAdministrator() {
     };
         return (
             <div className="App">
-                <input
-                onChange={OnChange}
-                placeholder="Menu name"
-                value={formData.name}
-                />
-                <input
-                onChange={e => setFormData({ ...formData, 'cost': e.target.value})}
-                placeholder="Cost"
-                value={formData.cost}
-                />
-                <input type="file" onChange={onChange}/>
-                <button onClick={createMenu}>Create Menu</button>
-                <p></p>
-                <br></br>
                 <div style={{marginBottom: 30, float:"left"}}>
                 {/* {
                 menus.map(menu => (
@@ -113,4 +98,4 @@ function AddMenuAdministrator() {
         );
 }
 
-export  { AddMenuAdministrator }
+export default Order;

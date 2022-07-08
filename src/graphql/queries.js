@@ -63,3 +63,93 @@ export const listMenus = /* GraphQL */ `
     }
   }
 `;
+export const getMenuItem = /* GraphQL */ `
+  query GetMenuItem($id: ID!) {
+    getMenuItem(id: $id) {
+      id
+      cnt
+      menu {
+        id
+        name
+        cost
+        image
+        createdAt
+        updatedAt
+      }
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const listMenuItems = /* GraphQL */ `
+  query ListMenuItems(
+    $filter: ModelMenuItemFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listMenuItems(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        cnt
+        menu {
+          id
+          name
+          cost
+          image
+          createdAt
+          updatedAt
+        }
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
+export const getOrder = /* GraphQL */ `
+  query GetOrder($id: ID!) {
+    getOrder(id: $id) {
+      id
+      index
+      order {
+        id
+        cnt
+        menu {
+          id
+          name
+          cost
+          image
+          createdAt
+          updatedAt
+        }
+        createdAt
+        updatedAt
+      }
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const listOrders = /* GraphQL */ `
+  query ListOrders(
+    $filter: ModelOrderFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listOrders(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        index
+        order {
+          id
+          cnt
+          createdAt
+          updatedAt
+        }
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
