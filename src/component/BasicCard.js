@@ -16,6 +16,10 @@ const bull = (
   </Box>
 );
 export default function BasicCard({menu}) {
+  const increseOrderCnt=(e)=>{
+    debugger;
+    console.log({menu});
+  }
   return (
     <Card sx={{ maxWidth: 300 }}>
       <CardMedia
@@ -41,7 +45,7 @@ export default function BasicCard({menu}) {
         </Typography>
       </CardContent>
       <CardActions style={{display:'block'}}>
-        <Button size="small" variant="outlined">+</Button>
+        <Button size="small" variant="outlined" onClick={increseOrderCnt}>+</Button>
         <Button size="small" variant="outlined">-</Button>
       </CardActions>
     </Card>
